@@ -1,9 +1,10 @@
-function envoyer() {
+function envoyer(via) {
     fetch("http://localhost:5005", {
         method: "POST",
         body: JSON.stringify({
             titre: document.getElementById("titre").value,
-            message: document.getElementById("message").value
+            message: document.getElementById("message").value,
+            via: via
         })
     });
 }

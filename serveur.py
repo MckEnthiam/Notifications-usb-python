@@ -9,15 +9,22 @@ class Handler(BaseHTTPRequestHandler):
         data = json.loads(self.rfile.read(longueur))
         titre = data.get("titre", "")
         message = data.get("message", "")
+        via = data.get("via", "python")
 
-        cmd = [
-            "adb", "shell", "cmd", "notification", "post",
-            "-S", "bigtext",
-            "-t", shlex.quote(titre),
-            "python_notif",
-            shlex.quote(message),
-        ]
-        subprocess.run(cmd)
+        try:
+            if via == "c":
+                subprocess.run(["notif_usb.exe", titre, message])
+            else:
+                cmd = [
+                    "adb", "shell", "cmd", "notification", "post",
+                    "-S", "bigtext",
+                    "-t", shlex.quote(titre),
+                    "python_notif",
+                    shlex.quote(message),
+                ]
+                subprocess.run(cmd)
+        except Exception as e:
+            print("Erreur:", e)
 
         self.send_response(200)
         self.send_header("Access-Control-Allow-Origin", "*")
